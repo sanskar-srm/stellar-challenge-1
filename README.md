@@ -1,70 +1,311 @@
-# Getting Started with Create React App
+# Stellar Connect Wallet 🌟
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, user-friendly web application for managing Stellar (XLM) assets with seamless wallet integration, built with React and styled with Tailwind CSS.
 
-## Available Scripts
+![React](https://img.shields.io/badge/React-19.2-blue?logo=react)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4-38B2AC?logo=tailwind-css)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **🔗 Wallet Connection**: Seamlessly connect your Freighter wallet with one click
+- **💰 Balance Display**: Real-time XLM balance from the Stellar Network
+- **📬 Send XLM**: Transfer XLM tokens to other Stellar addresses with ease
+- **📊 Transaction History**: View your complete transaction history on Stellar
+- **📲 QR Code**: Generate and share your public address via QR code
+- **📋 Address Management**: Copy your address to clipboard instantly
+- **🔐 Secure**: No private keys stored locally - all transactions signed by Freighter
+- **🎨 Beautiful UI**: Modern, responsive interface with smooth animations
+- **🌙 Dark Theme**: Eye-friendly dark gradient design
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🚀 Quick Start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
+- Node.js 16+ and npm
+- [Freighter Wallet](https://www.freighter.app/) browser extension installed
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/stellar-connect-wallet.git
+cd stellar-connect-wallet
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Install dependencies
+npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Start the development server
+npm start
+```
 
-### `npm run eject`
+The app will open at `https://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Build for Production
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📖 How to Use
 
-## Learn More
+### 1. **Connect Your Wallet**
+   - Click the "Connect" button on the landing screen
+   - Approve the connection in your Freighter wallet popup
+   - Your wallet info will appear instantly
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 2. **View Your Balance**
+   - Your XLM balance is displayed in the wallet card
+   - Updates are fetched from the Stellar Network
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 3. **View Your Address**
+   - Click the copy icon to copy your address to clipboard
+   - Click the QR code icon to view and share your public address
 
-### Code Splitting
+### 4. **Send XLM**
+   - Click the "Send" button
+   - Enter recipient address and amount
+   - Review the transaction and sign with Freighter
+   - Confirm on Stellar Network
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 5. **Check History**
+   - Click the "History" button
+   - View all your transactions (last 50)
+   - See transaction hashes, dates, and types
 
-### Analyzing the Bundle Size
+### 6. **Disconnect**
+   - Click "Disconnect Wallet" to exit
+   - Your data is cleared - no persistence
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## 📸 Screenshots
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Landing Page
+Initial screen showing "Stellar Dapp" title with Connect button.
 
-### Advanced Configuration
+![Landing Page](./public/landing-page.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Wallet Connected with Balance Display
+Connected wallet showing address, balance (XLM amount), and action buttons for Send/History/Disconnect.
 
-### Deployment
+![Wallet Connected](./public/wallet-connected.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Successful Testnet Transaction
+Transaction confirmation showing successful XLM transfer on the Stellar Testnet.
 
-### `npm run build` fails to minify
+![Successful Transaction](./public/transaction.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## 🏗️ Project Structure
+
+```
+stellar-connect-wallet/
+├── src/
+│   ├── components/
+│   │   ├── Freighter.js          # Freighter API integration
+│   │   ├── SendXLM.js            # Send transaction component
+│   │   ├── History.js            # Transaction history component
+│   │   └── Header.js             # Header component
+│   ├── App.js                    # Main app component
+│   ├── App.css                   # App styles
+│   ├── index.js                  # Entry point
+│   └── index.css                 # Global styles
+├── public/
+│   ├── index.html                # HTML template
+│   ├── manifest.json             # PWA manifest
+│   └── robots.txt
+├── package.json                  # Dependencies
+├── tailwind.config.js            # Tailwind configuration
+└── README.md                     # This file
+```
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend Framework**: [React 19.2](https://react.dev/)
+- **Styling**: [Tailwind CSS 3.4](https://tailwindcss.com/)
+- **Blockchain Integration**: 
+  - [@stellar/stellar-sdk 15.0](https://developers.stellar.org/docs/reference/sdk-reference)
+  - [@stellar/freighter-api 6.0](https://www.freighter.app/)
+- **QR Code**: [qrcode.react](https://www.npmjs.com/package/qrcode.react)
+- **Utilities**: [react-copy-to-clipboard](https://www.npmjs.com/package/react-copy-to-clipboard)
+- **Build Tool**: [Create React App](https://create-react-app.dev/)
+
+---
+
+## 🔧 Key Components
+
+### Freighter.js
+Handles all blockchain interactions:
+- `checkConnection()` - Verify Freighter connection
+- `retrievePublicKey()` - Get user's Stellar address
+- `getBalance()` - Fetch XLM balance
+- `userSignTransaction()` - Sign transactions with Freighter
+
+### SendXLM.js
+- Form validation for recipient address and amount
+- Real-time Stellar address validation
+- Transaction building and signing
+- Success/error notifications
+
+### History.js
+- Fetches transaction data from Horizon API
+- Displays last 50 transactions
+- Shows transaction hash, date, type, and memo
+
+---
+
+## 🌐 Network
+
+This application runs on the **Stellar Test Network (Testnet)**.
+
+- **Horizon API**: `https://horizon-testnet.stellar.org`
+- **Network Passphrase**: `Test SDF Network ; September 2015`
+
+⚠️ **Note**: No real XLM is used. For testnet lumens, visit the [Stellar Testnet Friendbot](https://laboratory.stellar.org/?network=test#friendbot)
+
+---
+
+## 🔐 Security
+
+- **Private Keys**: Never stored or transmitted - Freighter handles signing
+- **Network**: Uses HTTPS for all API calls
+- **Testnet Only**: Safe for development and testing
+- **No Backend**: All transactions happen directly on-chain
+
+---
+
+## 🎨 UI Features
+
+- **Responsive Design**: Works on desktop and mobile
+- **Dark Mode**: Easy on the eyes with professional gradients
+- **Smooth Animations**: Fade-in effects and hover transitions
+- **Accessible Icons**: SVG icons with clear labels
+- **Modal Dialogs**: Non-intrusive Send, History, and QR modals
+- **Loading States**: Visual feedback during async operations
+- **Error Handling**: Clear error messages and alerts
+
+---
+
+## 📱 Browser Support
+
+- Chrome/Edge 90+
+- Firefox 88+
+- Safari 14+
+- Any browser supporting ES6+ and WebGL
+
+---
+
+## 🚦 Getting Started with Freighter
+
+1. **Install Freighter**:
+   - Visit [freighter.app](https://www.freighter.app/)
+   - Install for Chrome, Firefox, or Edge
+
+2. **Create/Import Account**:
+   - Create a new account or import existing one
+   - Save your secret key securely
+
+3. **Add Testnet Account**:
+   - Switch to Testnet in Freighter settings
+   - Get testnet XLM from [Friendbot](https://laboratory.stellar.org/?network=test#friendbot)
+
+4. **Connect to App**:
+   - Open Stellar Connect Wallet
+   - Click "Connect"
+   - Approve in Freighter popup
+
+---
+
+## 🐛 Troubleshooting
+
+### "Failed to connect wallet"
+- Ensure Freighter extension is installed and active
+- Check that you're on a supported browser
+- Try refreshing the page
+
+### "Invalid Stellar address"
+- Verify the recipient address starts with "G"
+- Make sure the address is exactly 56 characters
+- Use the correct Testnet addresses
+
+### "No balance showing"
+- Wait a few seconds for the network to respond
+- Ensure your Freighter account as testnet XLM
+- Refresh the page and reconnect
+
+### QR Code not generating
+- Check browser console for errors
+- Ensure your address is loaded correctly
+- Try clearing browser cache
+
+---
+
+## 📚 Resources
+
+- **Stellar Documentation**: https://developers.stellar.org/
+- **Freighter Docs**: https://www.freighter.app/
+- **Horizon API**: https://developers.stellar.org/docs/data/horizon
+- **Tailwind CSS**: https://tailwindcss.com/docs
+- **React Docs**: https://react.dev/
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## 👨‍💻 Author
+
+Created with ❤️ for the Stellar community
+
+---
+
+## ⭐ Support
+
+If you find this project helpful, please consider:
+- ⭐ Starring the repository
+- 🐛 Reporting bugs
+- 💡 Suggesting features
+- 📢 Sharing with others
+
+---
+
+## 📞 Contact & Support
+
+- **Issues**: [GitHub Issues](https://github.com/yourusername/stellar-connect-wallet/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/stellar-connect-wallet/discussions)
+- **Email**: your-email@example.com
+
+---
+
+<div align="center">
+
+**Made with React + Stellar ✨**
+
+[Install Freighter](https://www.freighter.app/) • [Stellar Docs](https://developers.stellar.org/) • [Report Bug](https://github.com/yourusername/stellar-connect-wallet/issues)
+
+</div>
