@@ -292,16 +292,6 @@ If you find this project helpful, please consider:
 - 💡 Suggesting features
 - 📢 Sharing with others
 
----
-
-## 📞 Contact & Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/stellar-connect-wallet/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/stellar-connect-wallet/discussions)
-- **Email**: your-email@example.com
-
----
-
 <div align="center">
 
 **Made with React + Stellar ✨**
