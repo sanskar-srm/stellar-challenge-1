@@ -23,12 +23,19 @@ function App() {
     try {
       await checkConnection();
       const pk = await retrievePublicKey();
+      
+      if (!pk || pk.trim() === "") {
+        throw new Error("No public key returned from Freighter");
+      }
+      
       setPublicKey(pk);
       const bal = await getBalance();
       setBalance(bal);
       setConnected(true);
     } catch (e) {
-      alert('Failed to connect wallet.');
+      console.error("Connection error:", e);
+      const errorMsg = e?.message || "Failed to connect wallet";
+      alert(`Connection Failed: ${errorMsg}\n\nPlease ensure:\n1. Freighter wallet is installed\n2. Freighter is unlocked\n3. You're on the Testnet\n4. Try refreshing the page`);
     }
     setLoading(false);
   };
@@ -178,7 +185,7 @@ function App() {
       {showSend && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in" onClick={() => setShowSend(false)}>
           <div className="w-full max-w-lg" onClick={e => e.stopPropagation()}>
-            <SendXLM onBack={() => setShowSend(false)} />
+            <SendXLM publicKey={publicKey} onBack={() => setShowSend(false)} />
           </div>
         </div>
       )}
@@ -187,7 +194,7 @@ function App() {
       {showHistory && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in" onClick={() => setShowHistory(false)}>
           <div className="w-full max-w-3xl" onClick={e => e.stopPropagation()}>
-            <History onBack={() => setShowHistory(false)} />
+            <History publicKey={publicKey} onBack={() => setShowHistory(false)} />
           </div>
         </div>
       )}

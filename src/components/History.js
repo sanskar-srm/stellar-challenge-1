@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { retrievePublicKey } from './Freighter'
 import * as StellarSdk from '@stellar/stellar-sdk'
 
-const History = ({ onBack }) => {
+const History = ({ publicKey: propPublicKey, onBack }) => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -11,14 +11,31 @@ const History = ({ onBack }) => {
 
     useEffect(() => {
         fetchTransactionHistory();
-    }, []);
+    }, [propPublicKey]);
 
     const fetchTransactionHistory = async () => {
         try {
             setLoading(true);
             setError("");
 
-            const address = await retrievePublicKey();
+            // Use prop first, then retrieve
+            let address = propPublicKey;
+            if (!address) {
+                try {
+                    address = await retrievePublicKey();
+                } catch (error) {
+                    setError("Failed to retrieve wallet address. Please try again.");
+                    setLoading(false);
+                    return;
+                }
+            }
+
+            if (!address || address.trim() === "") {
+                setError("Wallet address not available. Please reconnect your wallet.");
+                setLoading(false);
+                return;
+            }
+
             const response = await Server.transactions()
                 .forAccount(address)
                 .limit(50)
