@@ -62,8 +62,8 @@ Landing page with connect option
 Wallet dashboard showing balance
 Transaction confirmation screen
 ✅ Transaction Example
-Transaction ID : 55a5956b65290f3a1f8051e6e02f80055d7a57129e40a13a612eee5c9a096dd3
-Time           : 2026-03-31 12:28:43 UTC
+Transaction ID : 33b321387c31fa7532c19db12e519303fc0a9e111847b9d35df184e6e6c472d0
+Time           : 2026-03-31 14:25:42 UTC
 
 📁 Folder Structure
 stellar-challenge-1/
