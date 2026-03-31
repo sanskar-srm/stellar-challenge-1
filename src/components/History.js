@@ -18,27 +18,16 @@ const History = ({ publicKey: propPublicKey, onBack }) => {
             setLoading(true);
             setError("");
 
-            // Use prop first, then retrieve
-            let address = propPublicKey;
+            let address = propPublicKey || await retrievePublicKey();
             if (!address) {
-                try {
-                    address = await retrievePublicKey();
-                } catch (error) {
-                    setError("Failed to retrieve wallet address. Please try again.");
-                    setLoading(false);
-                    return;
-                }
-            }
-
-            if (!address || address.trim() === "") {
-                setError("Wallet address not available. Please reconnect your wallet.");
+                setError("WALLET_NOT_FOUND");
                 setLoading(false);
                 return;
             }
 
             const response = await Server.transactions()
                 .forAccount(address)
-                .limit(50)
+                .limit(20)
                 .order("desc")
                 .call();
 
@@ -48,113 +37,110 @@ const History = ({ publicKey: propPublicKey, onBack }) => {
                 hash: tx.hash,
                 type: tx.type,
                 sourceAccount: tx.source_account,
-                memo: tx.memo,
+                memo: tx.memo || "N/A",
             }));
 
             setTransactions(formattedTransactions);
         } catch (err) {
-            console.log(err);
-            setError("Failed to load transaction history");
+            console.error(err);
+            setError("FETCH_ERROR_NODE_OFFLINE");
         } finally {
             setLoading(false);
         }
     }
 
-    const truncateHash = (hash) => `${hash.slice(0, 10)}...${hash.slice(-10)}`;
+    const truncateHash = (hash) => `${hash.slice(0, 8)}...${hash.slice(-8)}`;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-8">
-            <div className="max-w-4xl mx-auto">
-                <div className="mb-6">
-                    <button
-                        onClick={onBack}
-                        className="text-blue-400 hover:text-blue-300 font-semibold mb-4 inline-flex items-center"
-                    >
-                        ← Back
-                    </button>
-                    <h2 className="text-3xl font-bold text-white">Transaction History</h2>
-                    <p className="text-slate-400 text-sm mt-2">View all your transaction history</p>
+        <div className="flex flex-col w-full animate-fade-in max-h-[80vh]">
+            {/* Header */}
+            <div className="p-6 border-b border-[#00ff88]/20 bg-[#00ff88]/5 flex items-center justify-between">
+                <div className="flex flex-col">
+                    <h2 className="neon-text font-bold text-xl">LEDGER_HISTORY</h2>
+                    <p className="text-[#00ff88]/40 text-[10px] tracking-widest uppercase mt-1">
+                        Viewing last 20 operations
+                    </p>
                 </div>
+                <button onClick={onBack} className="text-[#00ff88] hover:bg-[#00ff88]/10 p-2 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
 
+            <div className="p-0 overflow-y-auto">
                 {error && (
-                    <div className="mb-6 p-4 bg-red-900 text-red-200 border border-red-700 rounded-lg font-semibold">
-                        {error}
+                    <div className="m-8 p-4 border border-red-500/50 bg-red-500/10 text-red-400 font-mono text-xs uppercase animate-pulse">
+                        >> !! {error} !!
                     </div>
                 )}
 
                 {loading ? (
-                    <div className="text-center py-12">
-                        <div className="inline-block">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-                        </div>
-                        <p className="text-slate-400 mt-4">Loading transactions...</p>
+                    <div className="py-20 flex flex-col items-center space-y-4">
+                        <div className="w-10 h-10 border-2 border-t-[#00ff88] border-r-transparent border-b-[#00ff88]/30 border-l-transparent rounded-full animate-spin"></div>
+                        <p className="text-[#00ff88]/40 font-mono text-[10px] tracking-[0.2em]">SYNCING_WITH_NETWORK...</p>
                     </div>
                 ) : transactions.length === 0 ? (
-                    <div className="bg-slate-800 rounded-lg border border-slate-700 p-12 text-center">
-                        <p className="text-slate-400 text-lg">No transactions found</p>
+                    <div className="py-20 text-center">
+                        <p className="text-[#00ff88]/40 font-mono text-xs">NO_DATA_ENTRIES_FOUND</p>
                     </div>
                 ) : (
-                    <div className="bg-slate-800 rounded-lg shadow-xl border border-slate-700 overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead className="bg-slate-700 border-b border-slate-600">
-                                    <tr>
-                                        <th className="px-6 py-4 text-left text-slate-300 font-semibold text-sm">
-                                            Date
-                                        </th>
-                                        <th className="px-6 py-4 text-left text-slate-300 font-semibold text-sm">
-                                            Type
-                                        </th>
-                                        <th className="px-6 py-4 text-left text-slate-300 font-semibold text-sm">
-                                            Hash
-                                        </th>
-                                        <th className="px-6 py-4 text-left text-slate-300 font-semibold text-sm">
-                                            Memo
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-700">
-                                    {transactions.map((tx, index) => (
-                                        <tr
-                                            key={tx.id}
-                                            className="hover:bg-slate-700/50 transition duration-150"
-                                        >
-                                            <td className="px-6 py-4 text-slate-300 text-sm">
+                    <div className="w-full">
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="border-b border-[#00ff88]/10 bg-black/20">
+                                    <th className="px-6 py-4 text-left text-[#00ff88]/60 text-[10px] tracking-widest uppercase font-bold">HASH</th>
+                                    <th className="px-6 py-4 text-left text-[#00ff88]/60 text-[10px] tracking-widest uppercase font-bold">TIMESTAMP</th>
+                                    <th className="px-6 py-4 text-left text-[#00ff88]/60 text-[10px] tracking-widest uppercase font-bold">MEMO</th>
+                                    <th className="px-6 py-4 text-right text-[#00ff88]/60 text-[10px] tracking-widest uppercase font-bold">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-[#00ff88]/5">
+                                {transactions.map((tx) => (
+                                    <tr key={tx.id} className="hover:bg-[#00ff88]/5 transition-colors group">
+                                        <td className="px-6 py-4">
+                                            <span className="text-[#00ff88]/80 font-mono text-[10px] group-hover:text-[#00ff88] transition-colors">
+                                                {truncateHash(tx.hash)}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="text-white/60 font-mono text-[10px] uppercase">
                                                 {tx.date}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <span className="inline-block bg-blue-900 text-blue-200 px-3 py-1 rounded-full text-xs font-semibold">
-                                                    {tx.type}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <code className="text-slate-400 font-mono text-xs bg-slate-700 px-2 py-1 rounded">
-                                                    {truncateHash(tx.hash)}
-                                                </code>
-                                            </td>
-                                            <td className="px-6 py-4 text-slate-300 text-sm">
-                                                {tx.memo || (
-                                                    <span className="text-slate-500 italic">-</span>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="text-white/40 font-mono text-[10px] italic">
+                                                {tx.memo}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <a
+                                                href={`https://stellar.expert/explorer/testnet/tx/${tx.hash}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-[#00ff88]/60 hover:text-[#00ff88] text-[10px] font-mono tracking-widest"
+                                            >
+                                                [ VIEW_LOG ]
+                                            </a>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 )}
-
+            </div>
+            
+            <div className="p-6 border-t border-[#00ff88]/20 bg-black/40 text-center">
                 <button
-                    onClick={fetchTransactionHistory}
-                    disabled={loading}
-                    className="mt-6 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-2 px-6 rounded-lg transition duration-200"
+                    onClick={onBack}
+                    className="text-[#00ff88]/40 hover:text-[#00ff88] font-mono text-[10px] tracking-widest transition-colors uppercase"
                 >
-                    Refresh
+                    [ TERMINATE_OVERLAY ]
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default History
+export default History;

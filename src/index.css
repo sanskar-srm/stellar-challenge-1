@@ -1,3 +1,110 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --neon-green: #00ff88;
+  --dark-bg: #050608;
+  --card-bg: rgba(10, 20, 15, 0.8);
+  --glow-shadow: 0 0 10px rgba(0, 255, 136, 0.3), 0 0 20px rgba(0, 255, 136, 0.1);
+  --heavy-glow: 0 0 15px rgba(0, 255, 136, 0.6), 0 0 30px rgba(0, 255, 136, 0.2);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--dark-bg);
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle Grid Pattern */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-green);
+}
+
+@layer components {
+  .cyber-card {
+    @apply rounded-xl border border-[#00ff88]/30 bg-[#0a140f]/80 backdrop-blur-md;
+    box-shadow: var(--glow-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .cyber-card:hover {
+    box-shadow: var(--heavy-glow);
+    border-color: rgba(0, 255, 136, 0.5);
+  }
+
+  .neon-text {
+    @apply uppercase tracking-widest text-[#00ff88];
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  }
+
+  .cyber-button {
+    @apply border border-[#00ff88] text-[#00ff88] bg-transparent font-bold uppercase tracking-widest transition-all duration-200 transform;
+    box-shadow: 0 0 5px rgba(0, 255, 136, 0.2);
+  }
+
+  .cyber-button:hover {
+    @apply scale-[1.05] bg-[#00ff88]/10;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+  }
+
+  .cyber-button:active {
+    @apply scale-[0.95];
+  }
+
+  .cyber-input {
+    @apply bg-transparent border border-[#00ff88]/30 text-white p-3 rounded-lg outline-none transition-all duration-200;
+  }
+
+  .cyber-input:focus {
+    @apply border-[#00ff88];
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+  }
+
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4;
+  }
+
+  .modal-content {
+    @apply w-full max-w-2xl cyber-card animate-modal-in overflow-hidden;
+  }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-modal-in {
+  animation: modal-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}

@@ -1,10 +1,16 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 20vmin;
   pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -13,26 +19,35 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Glass effect for cards */
+.glass {
+  background: rgba(10, 20, 15, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Fade in animation */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pulse glow for main card */
+.pulse-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+  100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
 }

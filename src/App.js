@@ -17,6 +17,15 @@ function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Disable background scroll when modal is open
+  React.useEffect(() => {
+    if (showQR || showSend || showHistory) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [showQR, showSend, showHistory]);
+
   // Connect wallet and fetch info
   const connectWallet = async () => {
     setLoading(true);
@@ -47,87 +56,100 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4">
       {/* Landing View */}
       {!connected && (
-        <div className="flex flex-col items-center justify-center h-screen w-full">
-          <h1 className="text-5xl font-bold text-white mb-8 animate-fade-in">Stellar Dapp</h1>
+        <div className="flex flex-col items-center justify-center space-y-8 animate-fade-in">
+          <div className="relative">
+            <h1 className="text-6xl font-black text-white tracking-tighter neon-text">
+              STELLAR<br/>TERMINAL
+            </h1>
+            <div className="absolute -inset-1 bg-[#00ff88]/20 blur-xl -z-10"></div>
+          </div>
           <button
             onClick={connectWallet}
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-12 rounded-xl shadow-lg text-2xl transition duration-200 disabled:opacity-60"
+            className="cyber-button py-4 px-12 rounded-none text-xl min-w-[250px]"
           >
-            {loading ? 'Connecting...' : 'Connect'}
+            {loading ? 'INITIALIZING...' : 'CONNECT WALLET'}
           </button>
+          <p className="text-[#00ff88]/50 font-mono text-sm tracking-widest">SECURE_ENCRYPTION_ACTIVE</p>
         </div>
       )}
 
       {/* Wallet View */}
       {connected && (
-        <div className="flex flex-col items-center justify-center w-full max-w-md bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-fade-in border border-slate-700">
+        <div className="w-full max-w-md cyber-card pulse-glow animate-fade-in">
           {/* Header */}
-          <div className="w-full h-24 bg-gradient-to-r from-blue-600 to-cyan-600 flex items-center justify-center">
-            <h2 className="text-2xl font-bold text-white">Wallet Connected</h2>
+          <div className="w-full p-6 border-b border-[#00ff88]/20 bg-[#00ff88]/5 flex items-center justify-between">
+            <h2 className="neon-text font-bold">NODE_CONNECTED</h2>
+            <div className="flex gap-1">
+              <div className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse"></div>
+              <div className="w-2 h-2 rounded-full bg-[#00ff88]/30"></div>
+              <div className="w-2 h-2 rounded-full bg-[#00ff88]/30"></div>
+            </div>
           </div>
           
-          <div className="p-8 w-full flex flex-col items-center">
+          <div className="p-8 w-full flex flex-col space-y-6">
             {/* Balance Card */}
-            <div className="w-full bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-6 mb-6 border border-slate-600">
-              <span className="text-slate-400 text-xs tracking-wider uppercase">Your Balance</span>
-              <div className="flex items-center justify-center gap-2 mt-2">
-                <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">{balance}</span>
-                <span className="text-xl text-slate-300">XLM</span>
+            <div className="w-full bg-[#00ff88]/5 border border-[#00ff88]/10 p-6 rounded-lg">
+              <span className="text-[#00ff88]/60 text-xs tracking-widest uppercase block mb-2">AVAILABLE_CREDITS</span>
+              <div className="flex items-baseline gap-3">
+                <span className="text-5xl font-black text-white tracking-tighter">{balance}</span>
+                <span className="text-xl text-[#00ff88] font-bold">XLM</span>
               </div>
             </div>
 
             {/* Address Card */}
-            <div className="w-full bg-slate-700/50 rounded-xl p-4 mb-6 border border-slate-600">
-              <span className="text-slate-400 text-xs tracking-wider uppercase block mb-2">Your Address</span>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-300 font-mono text-xs break-all flex-1">{publicKey}</span>
-                <CopyToClipboard text={publicKey} onCopy={() => setCopied(true)}>
-                  <button className="text-slate-400 hover:text-blue-400 transition duration-200 flex-shrink-0" title="Copy Address">
+            <div className="w-full bg-black/40 border border-[#00ff88]/10 p-4 rounded-lg">
+              <span className="text-[#00ff88]/60 text-xs tracking-widest uppercase block mb-2">PUBLIC_KEY</span>
+              <div className="flex items-center gap-3">
+                <span className="text-[#00ff88]/80 font-mono text-[10px] break-all flex-1 leading-relaxed">{publicKey}</span>
+                <div className="flex gap-2">
+                  <CopyToClipboard text={publicKey} onCopy={() => setCopied(true)}>
+                    <button className="text-[#00ff88]/60 hover:text-[#00ff88] transition-colors p-1" title="Copy Address">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    </button>
+                  </CopyToClipboard>
+                  <button onClick={() => setShowQR(true)} className="text-[#00ff88]/60 hover:text-[#00ff88] transition-colors p-1" title="Show QR Code">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6.364 1.636l-.707.707M20 12h-1M17.636 17.636l-.707-.707M12 20v-1M6.364 17.636l.707-.707M4 12h1M6.364 6.364l.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   </button>
-                </CopyToClipboard>
-                <button onClick={() => setShowQR(true)} className="text-slate-400 hover:text-blue-400 transition duration-200 flex-shrink-0" title="Show QR Code">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6.364 1.636l-.707.707M20 12h-1M17.636 17.636l-.707-.707M12 20v-1M6.364 17.636l.707-.707M4 12h1M6.364 6.364l.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </button>
+                </div>
               </div>
-              {copied && <span className="text-green-400 text-xs mt-2 block">✓ Copied!</span>}
+              {copied && <span className="text-[#00ff88] text-[10px] mt-2 block animate-pulse">>> COPY_SUCCESSFUL</span>}
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3 w-full mb-4">
+            <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setShowSend(true)}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2 group"
+                className="cyber-button py-4 flex items-center justify-center gap-2"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:scale-110 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                 </svg>
-                Send
+                SEND
               </button>
               <button
                 onClick={() => setShowHistory(true)}
-                className="flex-1 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-semibold py-3 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2 group"
+                className="cyber-button py-4 flex items-center justify-center gap-2"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:scale-110 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                History
+                HISTORY
               </button>
             </div>
             
             <button
               onClick={disconnectWallet}
-              className="w-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 hover:text-red-300 font-semibold py-2.5 px-4 rounded-lg transition duration-200 text-sm"
+              className="text-red-500/50 hover:text-red-500 text-[10px] tracking-widest transition-colors font-mono"
             >
-              Disconnect Wallet
+              [ TERMINATE_SESSION ]
             </button>
           </div>
         </div>
@@ -135,47 +157,30 @@ function App() {
 
       {/* QR Modal */}
       {showQR && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in p-4" onClick={() => setShowQR(false)}>
-          <div className="bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden w-full max-w-sm" onClick={e => e.stopPropagation()}>
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-6 flex items-center justify-between">
-              <h3 className="text-white font-bold text-xl">Stellar Address QR</h3>
-              <button onClick={() => setShowQR(false)} className="text-white hover:bg-white/20 p-2 rounded-lg transition">
+        <div className="modal-overlay" onClick={() => setShowQR(false)}>
+          <div className="modal-content max-w-sm" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-[#00ff88]/20 flex items-center justify-between">
+              <h3 className="neon-text font-bold">QR_ENCODING</h3>
+              <button onClick={() => setShowQR(false)} className="text-[#00ff88] hover:bg-[#00ff88]/10 p-1 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
             
-            <div className="p-8 flex flex-col items-center">
-              {/* QR Code Container */}
-              <div className="bg-white p-6 rounded-xl mb-6 shadow-lg border-4 border-slate-200">
-                <QRCodeSVG value={publicKey} size={300} level="H" />
+            <div className="p-8 flex flex-col items-center space-y-6">
+              <div className="bg-white p-4 rounded-sm shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                <QRCodeSVG value={publicKey} size={256} level="H" />
               </div>
               
-              {/* Address Display */}
-              <div className="w-full bg-slate-700/50 rounded-lg p-4 mb-6 border border-slate-600">
-                <span className="text-slate-400 text-xs tracking-wider uppercase block mb-2">Share Your Address</span>
-                <p className="text-slate-300 font-mono text-xs break-all leading-relaxed">{publicKey}</p>
+              <div className="w-full bg-black/40 border border-[#00ff88]/10 p-4 rounded-lg">
+                <span className="text-[#00ff88]/60 text-xs tracking-widest uppercase block mb-2">SCAN_ADDRESS</span>
+                <p className="text-[#00ff88]/80 font-mono text-[10px] break-all leading-relaxed">{publicKey}</p>
               </div>
               
-              {/* Action Buttons */}
-              <div className="w-full flex gap-3">
-                <CopyToClipboard text={publicKey}>
-                  <button className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2 group">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 group-hover:scale-110 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                    Copy
-                  </button>
-                </CopyToClipboard>
-                <button onClick={() => setShowQR(false)} className="flex-1 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2 group">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 group-hover:scale-110 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  Close
-                </button>
-              </div>
+              <button onClick={() => setShowQR(false)} className="cyber-button w-full py-3">
+                CLOSE_INTERFACE
+              </button>
             </div>
           </div>
         </div>
@@ -183,8 +188,8 @@ function App() {
 
       {/* Send Modal */}
       {showSend && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in" onClick={() => setShowSend(false)}>
-          <div className="w-full max-w-lg" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onClick={() => setShowSend(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <SendXLM publicKey={publicKey} onBack={() => setShowSend(false)} />
           </div>
         </div>
@@ -192,8 +197,8 @@ function App() {
 
       {/* History Modal */}
       {showHistory && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in" onClick={() => setShowHistory(false)}>
-          <div className="w-full max-w-3xl" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onClick={() => setShowHistory(false)}>
+          <div className="modal-content max-w-4xl" onClick={e => e.stopPropagation()}>
             <History publicKey={publicKey} onBack={() => setShowHistory(false)} />
           </div>
         </div>
